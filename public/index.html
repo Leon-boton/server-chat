@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>iOS Dark Chat</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="chat-container">
+    <ul id="messages"></ul>
+    <div class="input-area">
+      <input id="m" autocomplete="off" placeholder="Сообщение..." />
+      <button onclick="send()">Отправить</button>
+    </div>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
+
+    function send() {
+      const input = document.getElementById('m');
+      const msg = input.value.trim();
+      if (msg) {
+        socket.emit('chat message', msg);
+        input.value = '';
+      }
+    }
+
+    socket.on('chat message', function(msg){
+      const li = document.createElement("li");
+      li.textContent = msg;
+      document.getElementById("messages").appendChild(li);
+    });
+  </script>
+</body>
+</html>
